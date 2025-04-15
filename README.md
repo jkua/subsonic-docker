@@ -91,6 +91,7 @@ If you have problems with Subsonic's Sonos support while running in Docker, this
 [Removing network isolation](https://docs.docker.com/engine/network/) from the docker container may help. Add these parameters to the above `docker run` commands:
 * `--net=host`
 * `-eSUBSONIC_HOST=<your host IP>`
+
 Note that with this, the `-p` port publishing parameters are no longer necessary.
 
 If this still doesn't work, also try disabling the firewall on your host machine. On Ubuntu, try running `sudo ufw disable` and then restarting the container.
