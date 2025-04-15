@@ -85,6 +85,16 @@ docker run -it \
     stuckj/subsonic:latest
 ```
 
+### Sonos issues
+If you have problems with Subsonic's Sonos support while running in Docker, this may be due to Sonos' use of UPnP. There are a few things that can be done to fix this, but note that the following steps reduce your server's network security and carries some level of additional risk!
+
+[Removing network isolation](https://docs.docker.com/engine/network/) from the docker container may help. Add these parameters to the above `docker run` commands:
+* `--net=host`
+* `-eSUBSONIC_HOST=<your host IP>`
+Note that with this, the `-p` port publishing parameters are no longer necessary.
+
+If this still doesn't work, also try disabling the firewall on your host machine. On Ubuntu, try running `sudo ufw disable` and then restarting the container.
+
 ## Docker compose
 
 Here is an example `docker-compose.yaml` if you choose to run with docker compose:
@@ -107,6 +117,13 @@ services:
       - /data/playlists:/var/playlists
       - /data/subsonic-data:/var/subsonic
 ```
+
+## Running as a service
+If you want to run subsonic as a service (not using Docker compose), modify [subsonic-docker.service](subsonic-docker.service) and install it:
+1. Copy the file to `/etc/systemd/system/subsonic-docker.service`
+2. `sudo systemctl daemon-reload`
+3. `sudo systemctl enable subsonic-docker`
+4. `sudo systemctl start subsonic-docker`
 
 ## TODOs
 

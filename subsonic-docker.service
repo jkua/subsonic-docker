@@ -1,0 +1,21 @@
+[Unit]
+Description=Subsonic (Docker) Service
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker exec %n stop
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull stuckj/subsonic:latest
+ExecStart=/usr/bin/docker run --rm \
+    -p "4040:4040/tcp" \
+    -v /data/music:/var/music \
+    -v /data/subsonic-data:/var/subsonic \
+    --name="subsonic" \
+    stuckj/subsonic:latest
+ExecStop=/usr/bin/docker exec %n stop
+
+[Install]
+WantedBy=default.target
